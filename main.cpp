@@ -5,40 +5,7 @@
 #include <cmath>
 #include <algorithm>
 #include "PGMImage.hpp"
-
-//sx,y=∑ci=1∑cj=1I[max{1,x−ceil(c/2)+i},max{1,y−ceil(c/2)+j}]∗k[i,j]
-float S(const PGMImage& image, const std::vector<float>& kernel, int kernelSize, int x, int y)
-{
-    float sum = 0.f;
-    int center = static_cast<int>(std::ceil(kernelSize / 2.0));
-    for(int i = 0; i < kernelSize; ++i)
-    {
-        for(int j = 0; j < kernelSize; ++j)
-        {
-            int Ix = std::max(1, x - center + i);
-            int Iy = std::max(1, y - center + j);
-            sum += image.get_at(Ix, Iy) * kernel.at(i + j*kernelSize);
-        }
-    }
-    return sum;
-}
-
-PGMImage filter(const PGMImage& image, const std::vector<float>& kernel)
-{
-    int kernelSize = static_cast<int>(sqrt(kernel.size()));
-    PGMImage filtered(image.get_width(), image.get_height(), image.get_maxGrey());
-
-    for(int y = 0; y < image.get_height(); ++y)
-    {
-        for(int x = 0; x < image.get_width(); ++x)
-        {
-            unsigned char newGreyness = static_cast<unsigned char>(std::round( S(image, kernel, kernelSize, x, y) ));
-            filtered.modify_at(x,y, newGreyness);
-        }
-    }
-    return filtered;
-}
-
+#include "filter.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -48,13 +15,6 @@ int main(int argc, char* argv[])
         1/9.f, 1/9.f, 1/9.f,
         1/9.f, 1/9.f, 1/9.f,
         1/9.f, 1/9.f, 1/9.f
-    };
-    //which somehow destroys the picture
-    std::vector<float> blur_kernel2 = 
-    {
-        1/8.f, 1/8.f, 1/8.f,
-        1/8.f, 1/8.f, 1/8.f,
-        1/8.f, 1/8.f, 1/8.f
     };
     std::vector<float> identity_kernel = 
     {
@@ -66,12 +26,10 @@ int main(int argc, char* argv[])
     std::cout << "The Images program!\n";
 
     PGMImage balloons("../pgmfiles/balloons.pgm");
-    PGMImage filtered = filter(balloons, blur_kernel);
+    Filter blur_filter("../filters/blur_kernel.txt");
+
+    PGMImage filtered = blur_filter.create_filtered_image(balloons);
     filtered.save("../pgmfiles/filtered.pgm");
-    
-    PGMImage apollo("../pgmfiles/apollo.pgm");
-    PGMImage filtered2 = filter(apollo, blur_kernel);
-    filtered2.save("../pgmfiles/filtered2.pgm");
 
     return 0;
 }

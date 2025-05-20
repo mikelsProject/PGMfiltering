@@ -41,7 +41,7 @@ void PGMImage::load(const std::string filename)
 {
     std::ifstream in(filename, std::ios::binary);
     if(!in)
-        std::cerr << "Could not open the file for reading";
+        std::cerr << "Could not open the file for reading PGMImage";
     std::string magic;
     in >> magic;
     in >> m_width >> m_height >> m_maxGrey;
@@ -56,9 +56,9 @@ void PGMImage::load(const std::string filename)
     {
         m_pixelsGreyness.clear();
         m_pixelsGreyness.reserve(m_height * m_width);
-        std::string greyness;
+        int greyness;
         while(in >> greyness)
-            m_pixelsGreyness.push_back(std::stoi(greyness));
+            m_pixelsGreyness.push_back(greyness);
     }
     else
         std::cerr << "Invalid PGM format (expected P5 or P2)\n";

@@ -5,6 +5,7 @@
 #include <cmath>
 #include "PGMImage.hpp"
 
+//class which stores kernel and uses it to perform filtering operation on PGMImages
 class Filter
 {
 public:

@@ -37,6 +37,8 @@ float Filter::S(const PGMImage& image, int x, int y)
         {
             int Ix = std::max(1, x - center + i);
             int Iy = std::max(1, y - center + j);
+            Ix = std::min((int)image.get_width()  -1, Ix);
+            Iy = std::min((int)image.get_height() -1, Iy);
             sum += image.get_at(Ix, Iy) * m_kernel.at(i + j*m_size);
         }
     }

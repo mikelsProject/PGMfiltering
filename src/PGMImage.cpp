@@ -14,7 +14,7 @@ unsigned char PGMImage::get_at(size_t x, size_t y) const
 {
     if(x < 0 || x >= m_width || y < 0 || y >= m_height)
     {
-        std::cerr << "Trying to read pixel index out of bounds";
+        std::cerr << "Trying to read pixel index out of bounds\n";
         return m_pixelsGreyness[0];
     }
     return m_pixelsGreyness[x + y*m_width];
@@ -23,7 +23,7 @@ unsigned char PGMImage::get_at(size_t x, size_t y) const
 void PGMImage::modify_at(size_t x, size_t y, unsigned char newGreyness)
 {
     if(x < 0 || x >= m_width || y < 0 || y >= m_height)
-        std::cerr << "Trying to modify pixel index out of bounds";
+        std::cerr << "Trying to modify pixel index out of bounds\n";
     else
         m_pixelsGreyness.at(x + y*m_width) = newGreyness;
 }
